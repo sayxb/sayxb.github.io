@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Motto. Etc.
+subtitle: 
 
 profile:
   align: right
@@ -25,10 +25,11 @@ latest_posts:
 ---
 
 My name is Sayeb Salam, I am currently a 3rd year undergraduate Maths student at the University of East Anglia. 
-My interests in mathematics span across applied and pure mathematics. On the applied side, I am interested in fluid dynamics, particularly concerned with questions of form "when does this flow detach?". I recently completed some research on a question to this effect, extending results from this [publication in the Royal Society](https://royalsocietypublishing.org/rspa/article/482/2330/20250748/479597/The-Moffatt-Pukhnachev-flow-a-new-twist-on-an-old) with Prof. Mark Blyth. In particular, we looked at the stationary and linear Moffatt-Pukhnachev problem.  
+
+On the applied side, I am interested in fluid dynamics, particularly concerned with questions of form "when does this flow detach?". I recently completed some research on a question to this effect, extending results from this [publication in the Royal Society](https://royalsocietypublishing.org/rspa/article/482/2330/20250748/479597/The-Moffatt-Pukhnachev-flow-a-new-twist-on-an-old) with Prof. Mark Blyth. In particular, we looked at the stationary and linear Moffatt-Pukhnachev problem. While I am writing up a proper script for it, here are the [rough notes](/assets/bibliography/MP_flows_project(1).pdf) (with many mistakes and random notational changes) that I took whilst working.
 
 In pure maths, my interests tend to fall into Algebraic Geometry/Topology side of things. I am generally interested in things concerning [Simplicial Complexes](https://en.wikipedia.org/wiki/Simplicial_complex), and even more generally interested in most things Algebra.
-In my 3rd year, I am undertaking a dissertation studying an intersection between the representation theory of linear algebraic groups and a particular construction that happens to be a Simplicial Complex. In particular, studying the Steinberg representation and its property of being isomorphic to [Buildings](https://en.wikipedia.org/wiki/Building_(mathematics)).
+In my 3rd year, I am undertaking a dissertation studying an intersection between the representation theory of algebraic groups and simplicial homology.
 
 I am also interested in Lean and the formalisation of Algebraic Geometry and Number theory. In June, I participated in part 1 of the [Lean-LMFDB](https://multramate.github.io/lean-lmfdb/) workshop, working with Prof. John Cremona to formalise the theorem that Lattices are, up to homothety, defined by their invariants, formally define real lattices and prove that lattices are real if and only if they have real-valued invariants. 
 
