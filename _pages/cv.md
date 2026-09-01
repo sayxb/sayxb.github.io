@@ -5,5 +5,6 @@ title: CV
 nav: true
 nav_order: 5
 cv_pdf: https://github.com/sayxb/sayxb.github.io/blob/193bb5273ebd73aab1a0e184c1888a244aad78b9/assets/pdf/Sayeb_Salam_CV%20(28).pdf # you can also use external links here
-description: You can download my [CV here](https://github.com/sayxb/sayxb.github.io/blob/193bb5273ebd73aab1a0e184c1888a244aad78b9/assets/pdf/Sayeb_Salam_CV%20(28).pdf), upto date as of 01/09/26
+description: 
 ---
+You can download by [CV here](https://github.com/sayxb/sayxb.github.io/blob/1331f391bb1fb59474645a465eb3d503dde2c716/assets/pdf/SayebSalamCV.pdf), upto date as of 01/09/26
