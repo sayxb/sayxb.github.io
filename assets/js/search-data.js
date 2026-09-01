@@ -23,13 +23,6 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/projects/";
           },
-        },{id: "nav-repositories",
-          title: "repositories",
-          description: "Edit the `_data/repositories.yml` and change the `github_users` and `github_repos` lists to include your own GitHub profile and repositories.",
-          section: "Navigation",
-          handler: () => {
-            window.location.href = "/repositories/";
-          },
         },{id: "nav-cv",
           title: "CV",
           description: "You can download my [CV here](https://github.com/sayxb/sayxb.github.io/blob/193bb5273ebd73aab1a0e184c1888a244aad78b9/assets/pdf/Sayeb_Salam_CV%20(28).pdf), upto date as of 01/09/26",
