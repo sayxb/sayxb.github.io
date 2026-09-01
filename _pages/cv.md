@@ -1,12 +1,9 @@
 ---
-layout: cv
+layout: page
 permalink: /cv/
 title: CV
 nav: true
 nav_order: 5
-cv_pdf: /assets/pdf/example_pdf.pdf # you can also use external links here
-cv_format: rendercv # options: rendercv, jsonresume
-description: This is a description of the page. You can modify it in '_pages/cv.md'. You can also change or remove the top pdf download button.
-toc:
-  sidebar: left
+cv_pdf: https://github.com/sayxb/sayxb.github.io/blob/193bb5273ebd73aab1a0e184c1888a244aad78b9/assets/pdf/Sayeb_Salam_CV%20(28).pdf # you can also use external links here
+description: You can download my CV here, upto date as of 01/09/26
 ---
