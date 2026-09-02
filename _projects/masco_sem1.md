@@ -2,7 +2,7 @@
 layout: page
 title: MASCO stock pitch SEM1 25/26
 description: 
-img: 
+img: assets/img/Masco-pic.png
 importance: 10
 category: Oakwood
 related_publications: false
