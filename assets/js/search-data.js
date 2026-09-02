@@ -411,7 +411,7 @@ ninja.data = [{
           description: "",
           section: "News",},{id: "projects-aecom-stock-pitch-sem2",
           title: 'AECOM stock pitch SEM2',
-          description: "with background image",
+          description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/1_project/";
             },},{id: "teachings-data-science-fundamentals",
