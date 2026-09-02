@@ -9,14 +9,7 @@ ninja.data = [{
     handler: () => {
       window.location.href = "/";
     },
-  },{id: "nav-blog",
-          title: "blog",
-          description: "",
-          section: "Navigation",
-          handler: () => {
-            window.location.href = "/blog/";
-          },
-        },{id: "nav-projects",
+  },{id: "nav-projects",
           title: "projects",
           description: "",
           section: "Navigation",
@@ -409,8 +402,8 @@ ninja.data = [{
             },},{id: "news-a-simple-inline-announcement-with-markdown-emoji-sparkles-smile",
           title: 'A simple inline announcement with Markdown emoji! :sparkles: :smile:',
           description: "",
-          section: "News",},{id: "projects-aecom-stock-pitch-sem2",
-          title: 'AECOM stock pitch SEM2',
+          section: "News",},{id: "projects-aecom-stock-pitch-sem2-25-26",
+          title: 'AECOM stock pitch SEM2 25/26',
           description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/1_project/";
