@@ -31,15 +31,12 @@ As $$\Delta$$ is a path connected graph, $$H_0 = \mathbb{Z}$$,
 Proof:
 Note that $$\mathrm{ker}(\partial_0) = 0$$, so we have that
 \begin{equation}
-H_0(\Delta; \mathbb{Z}) &= \mathrm{ker}(\partial_0)/ \mathrm{Im}(\partial_1) \\
+H_0(\Delta) = \mathrm{ker}(\partial_0)/ \mathrm{Im}(\partial_1) 
 	= C_0 / \mathrm{Im}(\partial_1)
 \end{equation}
 Consider the equivalence relation $$\sim$$ under $$\mathrm{Im}(\partial_1)$$. Let $$\Delta_i$$ denote the set of $i$-simplices of $\Delta$ Let $$ v \in \Delta_0$$ have equivalence class $[v]$, then consider $$\forall u \in \Delta_i $$, there exists a path $$(u,w), ... , (k,v)$$ as $$\Delta$$ is path connected 
 \begin{equation}
-v = u + w - u + ... +  v - k \\
-  = u + \partial_1([u, w]) + ... + \partial_1([k,v]) \\
-  = u + \partial_1([u,w] + ... + [k,v]) \\
-  \implies v \sim u, \ \forall u \in \Delta_0
+v = u + w - u + ... +  v - k \\ = u + \partial_1([u, w]) + ... + \partial_1([k,v]) \\ = u + \partial_1([u,w] + ... + [k,v]) \\ \implies v \sim u, \ \forall u \in \Delta_0
 \end{equation}
 A similar argument can be made for each class $$ [\alpha v] \in C_0, \alpha \in \mathbb{Z}, v \in \Delta_0 $$. In this way, by getting an equivalence for each $$\alpha \in \mathbb{Z}$$ we see that $$H_0(\Delta) = C_0/\mathrm{Im}(\partial_1) \cong \mathbb{Z}$$ for a path connected graph, with the map $$[\alpha v] \rightarrow \alpha$$
 
