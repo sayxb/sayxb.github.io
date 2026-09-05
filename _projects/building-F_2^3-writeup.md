@@ -2,14 +2,14 @@
 layout: page
 title: The Building of F₂³ and its Steinberg Representation
 description: Constructing the Tits building of GL₃(F₂), computing its homology, and recovering dim St₃(F₂) = 8. Picture shown is the Heawood graph, which is equivalent to Building on $F_2$
-img: 
+img: assets/img/Heawood_Graph.svg
 importance: 50
 category: Dissertation
 ---
 
-The Tits building $$\Delta$$ of $$\mathbb{F}_2^3$$ is the simplicial complex whose simplices are flags of proper nonzero subspaces. Since $$\mathbb{F}_2^3$$ has only subspaces of dimension $$1$$ and $$2$$ available, $$T$$ is one-dimensional i.e. a graph. Below I construct it explicitly, compute $$H_0$$ and $$H_1$$, and explain why $$H_1$$ is isomorphic to the Steinberg representation $$\mathrm{St}_3(\mathbb{F}_2)$$.
+The [Tits building](https://en.wikipedia.org/wiki/Building_(mathematics)) $$\Delta$$ of $$\mathbb{F}_2^3$$ is the simplicial complex whose simplices are flags of proper nonzero subspaces. Since $$\mathbb{F}_2^3$$ has only subspaces of dimension $$1$$ and $$2$$ available, $$\Delta$$ is one-dimensional i.e. a graph. Below I construct it explicitly, compute $$H_0$$ and $$H_1$$, and thus find the dimension of the Steinberg representation $$\mathrm{St}_3(\mathbb{F}_2)$$.
 
-We are working over a very small field in a small number of dimensions so we can afford to explicitly list out each subspace. 
+We will re-label $\Delta$ as the Building on the vector space $V$ with basis elements $$\{ e_1, e_2, e_3\}$$ over $$\mathbb{F}_2$$ for technical accuracy. We are working over a very small field in a small number of dimensions so we can afford to explicitly list out some subspaces.
 
 ### Building on $$F_2^3$$
 
@@ -17,8 +17,9 @@ The subspaces of dimension 1 (i.e. lines) are
 $$ \langle e_1 \rangle , \langle e_2 \rangle , \langle e_3 \rangle, \langle e_1 + e_2 \rangle , \langle e_1 + e_3 \rangle , \langle e_2 + e_3 \rangle $$
 $$ \langle e_1 + e_2 + e_3 \rangle $$
 
-The subspaces of dimension 2 (i.e. planes) are 
-$$ \langle e_1, e_2 \rangle, \langle e_1, e_3 \rangle, \langle e_2, e_3 \rangle ... $$
+The subspaces of dimension 2 (i.e. planes) are given by families 
+$$\langle e_i, e_j \rangle, \ \langle e_i + e_j, e_k \rangle, \ \langle e_1 + e_2, e_1 + e_3 \rangle $$
+$$i \neq j \neq k \in {1,2,3}$$
 
 By observation each plane has 3 subspaces and thus 3 edges, so we get a total of 21 edges. 
 This is clearly a path connected graph (it is in fact the Heawood graph), it suffices to see that the 1-subspaces are connected. We get the chain complex 
@@ -59,3 +60,4 @@ H_1(\Delta) \cong \mathbb{Z}^8
 \end{equation}
 So then, by the Solomon-Tits theorem, we have that the Building $$\Delta$$ is homotopy equivalent to a wedge of 8 1-spheres (circles), and that 
 \begin{equation} \mathrm{dim St}_3(\mathbb{F}_2) = 8 \end{equation} 
+The Steinberg representation on $$\mathrm{GL}_3(\mathbb{F}_2)$$ has dimension 8.
