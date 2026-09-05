@@ -11,7 +11,7 @@ The [Tits building](https://en.wikipedia.org/wiki/Building_(mathematics)) $$\Del
 
 We will re-label $\Delta$ as the Building on the vector space $V$ with basis elements $$\{ e_1, e_2, e_3\}$$ over $$\mathbb{F}_2$$ for technical accuracy. We are working over a very small field in a small number of dimensions so we can afford to explicitly list out some subspaces.
 
-### Building on $$F_2^3$$
+### Building on $$\mathbb{F}_2^3$$
 
 The subspaces of dimension 1 (i.e. lines) are 
 \begin{equation} \langle e_1 \rangle , \langle e_2 \rangle , \langle e_3 \rangle, \langle e_1 + e_2 \rangle , \langle e_1 + e_3 \rangle , \langle e_2 + e_3 \rangle, \langle e_1 + e_2 + e_3 \rangle \end{equation}
