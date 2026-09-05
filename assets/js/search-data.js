@@ -407,6 +407,11 @@ ninja.data = [{
           description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/1_project/";
+            },},{id: "projects-the-building-of-f-and-its-steinberg-representation",
+          title: 'The Building of F₂³ and its Steinberg Representation',
+          description: "Constructing the Tits building of GL₃(F₂), computing its homology, and recovering dim St₃(F₂) = 8. Picture shown is the Heawood graph, which is equivalent to Building on $F_2$",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/building-F_2%5E3-writeup/";
             },},{id: "projects-masco-stock-pitch-sem1-25-26",
           title: 'MASCO stock pitch SEM1 25/26',
           description: "",
