@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.0"
+   width="1077.213"
+   height="1053.213"
+   id="svg180"
+   sodipodi:docname="Heawood_Graph.svg"
+   inkscape:version="1.2.1 (ef4d3fba62, 2022-07-19, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs184" />
+  <sodipodi:namedview
+     id="namedview182"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="0.73368042"
+     inkscape:cx="301.22107"
+     inkscape:cy="525.43313"
+     inkscape:window-width="1848"
+     inkscape:window-height="1016"
+     inkscape:window-x="72"
+     inkscape:window-y="387"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer2" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="edges"
+     transform="translate(18.606508,16.606508)"
+     sodipodi:insensitive="true">
+    <path
+       d="M 410,998 208,900 70,728 20,510 70,292 208,120 410,22 h 222 l 200,98 138,172 50,218 -50,218 -138,172 -200,98 z M 410,22 970,728 M 208,120 410,998 M 832,120 632,998 M 70,292 h 900 m 50,218 -812,390 M 70,728 632,22 M 832,900 20,510"
+       style="fill:none;stroke:#000000;stroke-width:5.5;stroke-dasharray:none"
+       id="path148" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="vertices"
+     transform="translate(18.606508,16.606508)"
+     sodipodi:insensitive="true">
+    <circle
+       cx="410"
+       cy="22"
+       r="21.106508"
+       id="circle150"
+       style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-dasharray:none" />
+    <circle
+       cx="632"
+       cy="22"
+       r="21.106508"
+       id="circle152"
+       style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-dasharray:none" />
+    <circle
+       cx="208"
+       cy="120"
+       r="21.106508"
+       id="circle154"
+       style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-dasharray:none" />
+    <circle
+       cx="832"
+       cy="120"
+       r="21.106508"
+       id="circle156"
+       style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-dasharray:none" />
+    <circle
+       cx="70"
+       cy="292"
+       r="21.106508"
+       id="circle158"
+       style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-dasharray:none" />
+    <circle
+       cx="970"
+       cy="292"
+       r="21.106508"
+       id="circle160"
+       style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-dasharray:none" />
+    <circle
+       cx="20"
+       cy="510"
+       r="21.106508"
+       id="circle162"
+       style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-dasharray:none" />
+    <circle
+       cx="1020"
+       cy="510"
+       r="21.106508"
+       id="circle164"
+       style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-dasharray:none" />
+    <circle
+       cx="70"
+       cy="728"
+       r="21.106508"
+       id="circle166"
+       style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-dasharray:none" />
+    <circle
+       cx="970"
+       cy="728"
+       r="21.106508"
+       id="circle168"
+       style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-dasharray:none" />
+    <circle
+       cx="208"
+       cy="900"
+       r="21.106508"
+       id="circle170"
+       style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-dasharray:none" />
+    <circle
+       cx="832"
+       cy="900"
+       r="21.106508"
+       id="circle172"
+       style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-dasharray:none" />
+    <circle
+       cx="632"
+       cy="998"
+       r="21.106508"
+       id="circle174"
+       style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-dasharray:none" />
+    <circle
+       cx="410"
+       cy="998"
+       r="21.106508"
+       id="circle176"
+       style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-dasharray:none" />
+  </g>
+</svg>
