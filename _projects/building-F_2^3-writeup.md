@@ -18,7 +18,7 @@ The subspaces of dimension 1 (i.e. lines) are
 
 The subspaces of dimension 2 (i.e. planes) are given by families 
 \begin{equation}\langle e_i, e_j \rangle, \ \langle e_i + e_j, e_k \rangle, \ \langle e_1 + e_2, e_1 + e_3 \rangle \end{equation}
-$$i \neq j \neq k \in {1,2,3}$$
+$$i \neq j \neq k \in \{1,2,3\}$$
 
 By observation each plane has 3 subspaces and thus 3 edges, so we get a total of 21 edges. 
 This is clearly a path connected graph (it is in fact the Heawood graph), it suffices to see that the 1-subspaces are connected. We get the chain complex 
