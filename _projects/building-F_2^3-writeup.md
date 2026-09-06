@@ -1,6 +1,6 @@
 ---
 layout: page
-title: The Building of F₂³ and its Steinberg Representation
+title: Homology of the Building of F₂³ 
 description: Constructing the Tits building of GL₃(F₂), computing its homology, and recovering dim St₃(F₂) = 8. Picture shown is the Heawood graph, which is equivalent to Building on $F_2$
 img: assets/img/Heawood_Graph.svg
 importance: 50
@@ -35,9 +35,14 @@ H_0(\Delta) = \mathrm{ker}(\partial_0)/ \mathrm{Im}(\partial_1)
 	= C_0 / \mathrm{Im}(\partial_1)
 \end{equation}
 Consider the equivalence relation $$\sim$$ under $$\mathrm{Im}(\partial_1)$$. Let $$\Delta_i$$ denote the set of $i$-simplices of $\Delta$ Let $$ v \in \Delta_0$$ have equivalence class $[v]$, then consider $$\forall u \in \Delta_i $$, there exists a path $$(u,w), ... , (k,v)$$ as $$\Delta$$ is path connected 
-\begin{equation}
-v = u + w - u + ... +  v - k \\ = u + \partial_1([u, w]) + ... + \partial_1([k,v]) \\ = u + \partial_1([u,w] + ... + [k,v]) \\ \implies v \sim u, \ \forall u \in \Delta_0
-\end{equation}
+$$
+\begin{align}
+v = u + w - u + ... +  v - k \\ 
+= u + \partial_1([u, w]) + ... + \partial_1([k,v]) \\ 
+= u + \partial_1([u,w] + ... + [k,v]) \\ 
+\implies v \sim u, \ \forall u \in \Delta_0
+\end{align}
+$$
 A similar argument can be made for each class $$ [\alpha v] \in C_0, \alpha \in \mathbb{Z}, v \in \Delta_0 $$. In this way, by getting an equivalence for each $$\alpha \in \mathbb{Z}$$ we see that $$H_0(\Delta) = C_0/\mathrm{Im}(\partial_1) \cong \mathbb{Z}$$ for a path connected graph, with the map $$[\alpha v] \rightarrow \alpha$$
 
 ### 1-Homology of $\Delta$
