@@ -32,7 +32,6 @@ Proof:
 Note that $$\mathrm{ker}(\partial_0) = 0$$, so we have that
 
 $$
-\begin{equation}
 \begin{aligned}
 H_0(\Delta) &= \mathrm{ker}(\partial_0)/ \mathrm{Im}(\partial_1) \\
 	&= C_0 / \mathrm{Im}(\partial_1)
