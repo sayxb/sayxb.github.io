@@ -7,7 +7,7 @@ importance: 50
 category: Dissertation
 ---
 
-The [Tits building](https://en.wikipedia.org/wiki/Building_(mathematics)) $$\Delta$$ of $$\mathbb{F}_2^3$$ is the simplicial complex whose simplices are flags of proper nonzero subspaces. Since $$\mathbb{F}_2^3$$ has only subspaces of dimension $$1$$ and $$2$$ available, $$\Delta$$ is one-dimensional i.e. a graph. Below I construct it explicitly, compute $$H_0$$ and $$H_1$$, and thus find the dimension of the Steinberg representation $$\mathrm{St}_3(\mathbb{F}_2)$$.
+The [Tits building](https://en.wikipedia.org/wiki/Building_(mathematics)) $$\Delta$$ of $$\mathbb{F}_2^3$$ is the simplicial complex whose simplices are flags of proper nonzero subspaces. Since $$\mathbb{F}_2^3$$ has only subspaces of dimension $$1$$ and $$2$$ available, $$\Delta$$ is one-dimensional i.e. a graph. Below I construct it explicitly, compute $$H_0$$ and $$H_1$$, and thus find the dimension of the Steinberg representation $$\mathrm{St}_3(\mathbb{F}_2)$$. This is a representation on $$\mathrm{GL}_3(\mathbb{F}_2)$$, it has a duality of sorts to the trivial representation and is thus a useful tool in representation theory.
 
 We will re-label $\Delta$ as the Building on the vector space $V$ with basis elements $$\{ e_1, e_2, e_3\}$$ over $$\mathbb{F}_2$$ for technical accuracy. We are working over a very small field in a small number of dimensions so we can afford to explicitly list out some subspaces.
 
@@ -46,7 +46,7 @@ $$
 v &= u + w - u + ... +  v - k \\ 
 &= u + \partial_1([u, w]) + ... + \partial_1([k,v]) \\ 
 &= u + \partial_1([u,w] + ... + [k,v]) \\ 
-\implies v \sim u, \ \forall u \in \Delta_0
+&\implies v \sim u, \ \forall u \in \Delta_0
 \end{aligned}
 \end{equation}
 $$
@@ -54,12 +54,16 @@ $$
 A similar argument can be made for each class $$ [\alpha v] \in C_0, \alpha \in \mathbb{Z}, v \in \Delta_0 $$. In this way, by getting an equivalence for each $$\alpha \in \mathbb{Z}$$ we see that $$H_0(\Delta) = C_0/\mathrm{Im}(\partial_1) \cong \mathbb{Z}$$ for a path connected graph, with the map $$[\alpha v] \rightarrow \alpha$$
 
 ### 1-Homology of $\Delta$
+
+$$
 \begin{equation}
 \begin{aligned}
 H_1(\Delta) &= \mathrm{ker}(\partial_1) / \mathrm{Im}(\partial_2), \ \partial_2 = 0 \\
   &= \mathrm{ker}(\partial_1)
 \end{aligned}
 \end{equation}
+$$
+
 $$\mathrm{ker}(\partial_1)$$ encodes cycles in $\Delta$. The cyclotomic number of a graph sort of provides the dimension of a graph's cycle space. More concretely, choose a spanning tree, which uses $$\mathrm{Im}(\partial_1)$$ of the $$21$$ edges; each of the remaining edges closes a fundamental cycle, and these cycles form a basis of $$\ker \partial_1$$, we thus have 
 \begin{equation}
 \mathrm{rank}(H_1(\Delta)) = \mathrm{rank ker}(\partial_1) = |\Delta_1| - |\Delta_0| + c = 8
@@ -70,4 +74,4 @@ H_1(\Delta) \cong \mathbb{Z}^8
 \end{equation}
 So then, by the Solomon-Tits theorem, we have that the Building $$\Delta$$ is homotopy equivalent to a wedge of 8 1-spheres (circles), and that 
 \begin{equation} \mathrm{dim (St}_3(\mathbb{F}_2)) = 8 \end{equation} 
-The Steinberg representation on $$\mathrm{GL}_3(\mathbb{F}_2)$$ has dimension 8.
+The Steinberg representation on $$\mathrm{GL}_3(\mathbb{F}_2)$$ has dimension 8. Going forward, I would aim to perform some kind of induction to produce the dimension of all $$\mathrm{St}_n(\mathbb{F}_2)$$ by finding a general form for the top homology of all Buildings built on $$\mathbb{F}_2^n$$. This should be nice to do, as the general form of the top homology should come out through some combinatorics and linear algebra through the Smith normal form, or otherwise by generalising the graph-theoretic facts I used here for higher dimensions (perhaps through some combinatorial Hodge theory? With Hodge Laplacians?). Either way, there should be a nice way of recovering information about all $$\mathrm{GL}_n(F_2)$$ from here.
