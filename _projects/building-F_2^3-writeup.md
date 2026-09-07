@@ -66,7 +66,7 @@ $$
 
 $$\mathrm{ker}(\partial_1)$$ encodes cycles in $\Delta$. The cyclotomic number of a graph sort of provides the dimension of a graph's cycle space. More concretely, choose a spanning tree, which uses $$\mathrm{Im}(\partial_1)$$ of the $$21$$ edges; each of the remaining edges closes a fundamental cycle, and these cycles form a basis of $$\ker \partial_1$$, we thus have 
 \begin{equation}
-\mathrm{rank}(H_1(\Delta)) = \mathrm{rank ker}(\partial_1) = |\Delta_1| - |\Delta_0| + c = 8
+\mathrm{rank}(H_1(\Delta)) = \mathrm{rank (ker}(\partial_1)) = |\Delta_1| - |\Delta_0| + c = 8
 \end{equation}
 Where $$c$$ is the number of connected components of $\Delta$ (here 1). Thus, we have
 \begin{equation}
