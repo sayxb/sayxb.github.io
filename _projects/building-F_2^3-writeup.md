@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Homology of the Building of F₂³ 
-description: Constructing the Tits building of GL₃(F₂), computing its homology, and recovering dim St₃(F₂) = 8. Picture shown is the Heawood graph, which is equivalent to Building on $F_2$
+description: Constructing the Tits Building of $\mathbb{F}_2^3$, computing its homology, and recovering the dimension of $St_3(\mathbb{F}_2)$. Picture shown is the Heawood graph, which is equivalent to the Building on $\mathbb{F}_2^3$
 img: assets/img/Heawood_Graph.svg
 importance: 50
 category: Dissertation
