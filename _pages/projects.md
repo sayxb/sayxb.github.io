@@ -5,7 +5,7 @@ permalink: /projects/
 description:
 nav: true
 nav_order: 3
-display_categories: [Lean-LMFDB, Dissertation, Oakwood]
+display_categories: [Lean, Dissertation, Oakwood]
 horizontal: false
 ---
 
