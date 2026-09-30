@@ -1,17 +1,15 @@
 ---
 layout: page
 title: Lattices from their Invariants in Lean
-description: Walking through my Lean 4 formalisation of the theorem that a complex lattice is determined by its invariants $g_2$ and $g_3$, via the Laurent expansion of the Weierstrass $\wp$-function.
+description: Walking through a Lean 4 formalisation of the theorem that a complex lattice is determined by its invariants $g_2$ and $g_3$, via the Laurent expansion of the Weierstrass $\wp$-function.
 importance: 1
 category: Lean
 related_publications: false
-toc:
-  sidebar: left
 ---
 
-In June I took part in part 1 of the [Lean-LMFDB](https://multramate.github.io/lean-lmfdb/) workshop, working with Prof. John Cremona. One of the things we formalised was the classical fact that a lattice in $$\mathbb{C}$$ is determined by its invariants $$g_2$$ and $$g_3$$. This page is a breakdown of that Lean file, block by block. For each block I go through the maths, the Lean syntax, and why the proof actually goes through. Writing out why each tactic call works is the best way I know of checking that I really understand a proof, so this is as much for me as for anyone else.
+In June I took part in part 1 of the [Lean-LMFDB](https://multramate.github.io/lean-lmfdb/) workshop, working with Prof. John Cremona. One of the things we formalised was the classical fact that a lattice in $$\mathbb{C}$$ is determined by its invariants $$g_2$$ and $$g_3$$. This page is a breakdown of that Lean file, block by block. For each block I go through the maths, the Lean syntax, and why the proof actually goes through. Writing out why each tactic call works is the best way I know of checking that I understand a proof, so this is really as much for me as for anyone else.
 
-## The statement
+## Problem statement
 
 A lattice is $$L = \mathbb{Z}\omega_1 + \mathbb{Z}\omega_2 \subset \mathbb{C}$$, where $$\omega_1, \omega_2$$ are linearly independent over $$\mathbb{R}$$. Its Eisenstein series and invariants are
 
