@@ -414,7 +414,7 @@ ninja.data = [{
               window.location.href = "/projects/building-F_2%5E3-writeup/";
             },},{id: "projects-lattices-from-their-invariants-in-lean",
           title: 'Lattices from their Invariants in Lean',
-          description: "Walking through my Lean 4 formalisation of the theorem that a complex lattice is determined by its invariants $g_2$ and $g_3$, via the Laurent expansion of the Weierstrass $\wp$-function.",
+          description: "Walking through a Lean 4 formalisation of the theorem that a complex lattice is determined by its invariants $g_2$ and $g_3$, via the Laurent expansion of the Weierstrass $\wp$-function.",
           section: "Projects",handler: () => {
               window.location.href = "/projects/lean-lattice-invariants/";
             },},{id: "projects-masco-stock-pitch-sem1-25-26",
