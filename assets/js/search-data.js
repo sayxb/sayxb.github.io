@@ -412,6 +412,11 @@ ninja.data = [{
           description: "Constructing the Tits Building of $\mathbb{F}_2^3$, computing its homology, and recovering the dimension of $\mathrm{St}_3(\mathbb{F}_2)$. Picture shown is the Heawood graph, which is equivalent to the Building on $\mathbb{F}_2^3$",
           section: "Projects",handler: () => {
               window.location.href = "/projects/building-F_2%5E3-writeup/";
+            },},{id: "projects-lattices-from-their-invariants-in-lean",
+          title: 'Lattices from their Invariants in Lean',
+          description: "Walking through my Lean 4 formalisation of the theorem that a complex lattice is determined by its invariants $g_2$ and $g_3$, via the Laurent expansion of the Weierstrass $\wp$-function.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/lean-lattice-invariants/";
             },},{id: "projects-masco-stock-pitch-sem1-25-26",
           title: 'MASCO stock pitch SEM1 25/26',
           description: "",
