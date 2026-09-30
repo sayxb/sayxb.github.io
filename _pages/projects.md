@@ -1,11 +1,11 @@
 ---
 layout: page
-title: projects
+title: Projects
 permalink: /projects/
 description:
 nav: true
 nav_order: 3
-display_categories: [Oakwood, Dissertation]
+display_categories: [Lean-LMFDB, Dissertation, Oakwood]
 horizontal: false
 ---
 
