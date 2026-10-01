@@ -25,11 +25,13 @@ $$
 
 **Theorem.** If $$g_2(L_1) = g_2(L_2)$$ and $$g_3(L_1) = g_3(L_2)$$, then $$L_1 = L_2$$.
 
-This is the sharp form of "a lattice is determined by its invariants up to homothety". Scaling $$L \mapsto \lambda L$$ sends $$g_2 \mapsto \lambda^{-4} g_2$$ and $$g_3 \mapsto \lambda^{-6} g_3$$, so if both are required to match exactly then you pin down the lattice itself, not just its shape.
+Scaling $$L \mapsto \lambda L$$ sends $$g_2 \mapsto \lambda^{-4} g_2$$ and $$g_3 \mapsto \lambda^{-6} g_3$$, so if both are required to match then you pin down the lattice itself. $$\lambda^4, \lambda^6 = 1$$ implies that $$\lambda$$ is both a 4th and 6th root of unity, which gives that $$/lambda$$ is $1,-1$, so $$L \mapsto \pm L$$. The set of points of $$-L$$ is the same as $$L$$ though so regardless of what you take $$\lambda$$ to be you get the same set of points.
 
 ## The idea of the proof
 
-The proof is the classical one, and it goes in five steps.
+Roughly, each term of the power series of Weierstrass $\wp$ equation for a period lattice $$L$$ gives a pole that determines a point in the lattice. You can show that the poles and the value of $$\wp$$ for a lattice near the poles are determined by $$g_2$$ and $$g_3$$, and so two lattices with the same $$g_2$$ and $$g_3$$ invariants have the same points. Proof was constructed in these steps:
+
+Much of the proof, with a lot of direction, was written by Claude's Opus and Fable 5. They were pretty good at writing Lean code that at least compiles, though they struggled with the logic of the proof. I think though by now, something like this could probably be one-shot by Opus 5.5 without much direction.
 
 1. Near $$0$$ we can write $$\wp_L(z) = 1/z^2 + f_L(z)$$ with $$f_L$$ analytic, and the Taylor coefficients of $$f_L$$ are Eisenstein series, $$f_L^{(n)}(0) = (n+1)!\,G_{n+2}(L)$$.
 2. The differential equation $$(\wp')^2 = 4\wp^3 - g_2\wp - g_3$$ turns into a recursion for these Taylor coefficients.
