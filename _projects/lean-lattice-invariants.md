@@ -9,6 +9,8 @@ related_publications: false
 
 In June I took part in part 1 of the [Lean-LMFDB](https://multramate.github.io/lean-lmfdb/) workshop, working with Prof. John Cremona. One of the things we formalised was the classical fact that a lattice in $$\mathbb{C}$$ is determined by its invariants $$g_2$$ and $$g_3$$. This page is a breakdown of that Lean file, block by block. For each block I go through the maths, the Lean syntax, and why the proof actually goes through. Writing out why each tactic call works is the best way I know of checking that I understand a proof, so this is really as much for me as for anyone else.
 
+This code is slightly changed and updated from what was produced during the workshop. I do intend to clean this up and write it to a much higher quality, but I keep putting it off. Hopefully soon.
+
 ## Problem statement
 
 A lattice is $$L = \mathbb{Z}\omega_1 + \mathbb{Z}\omega_2 \subset \mathbb{C}$$, where $$\omega_1, \omega_2$$ are linearly independent over $$\mathbb{R}$$. Its Eisenstein series and invariants are
@@ -41,8 +43,6 @@ Much of the proof, with a lot of direction, was written by Claude's Opus and Fab
 
 A lot of the heavy lifting is already in Mathlib, in Andrew Yang's file `Mathlib/Analysis/SpecialFunctions/Elliptic/Weierstrass.lean`. It has the definitions of $$\wp$$, $$\wp'$$, $$G_k$$, $$g_2$$ and $$g_3$$, the differential equation, the order of the poles, and a closed formula for the Taylor coefficients. Our job was mostly to put these together, which turned out to be a fair amount of work in itself.
 
-### A word on junk values
-
 Lean has no partial functions, so division by zero has to return something, and it returns $$0$$. Mathlib defines $$\wp_L$$ as a sum over the whole lattice, $$\sum_{l \in L} \big(1/(z-l)^2 - 1/l^2\big)$$, where the $$l = 0$$ term is $$1/z^2 - 1/0 = 1/z^2$$ (the pole term). At $$z = 0$$ every term vanishes, so $$\wp_L(0) = 0$$, and then $$\wp_L$$ vanishes at every lattice point by periodicity. This sounds a bit like cheating, but it's convenient: several identities below hold for every $$z \in \mathbb{C}$$, not just away from the lattice, so we can use them without dragging hypotheses around.
 
 ## 1. Imports and setup
@@ -64,9 +64,9 @@ attribute [local fun_prop] AnalyticAt.contDiffAt
 variable (L : PeriodPair)
 ```
 
-**The maths.** A `PeriodPair` is a structure with exactly three fields: two complex numbers `ω₁`, `ω₂` and a proof `indep` that they are $$\mathbb{R}$$-linearly independent. Everything else is a *definition* in the `PeriodPair` namespace rather than a field: `L.lattice` (the $$\mathbb{Z}$$-span of the periods, as a `Submodule ℤ ℂ`), `L.G n`, `L.g₂`, `L.g₃` and `℘[L]`. So `variable (L : PeriodPair)` fixes a pair of periods, and all of those become available through dot notation.
+A `PeriodPair` is a structure with three fields: two complex numbers `ω₁`, `ω₂` and a proof `indep` that they are $$\mathbb{R}$$-linearly independent. Everything else is a definition in the `PeriodPair` namespace rather than a field: `L.lattice` (the $$\mathbb{Z}$$-span of the periods, as a `Submodule ℤ ℂ`), `L.G n`, `L.g₂`, `L.g₃` and `℘[L]`.
 
-**The Lean.** Apart from the Weierstrass file, the other two imports are quite specific. `Mathlib.Data.Nat.Choose.Cast` gives `Nat.cast_choose_two`, which says $$\binom{n}{2} = n(n-1)/2$$ once cast into a field (used in section 6). `Mathlib.Topology.Algebra.Module.Cardinality` gives `Set.Countable.dense_compl`, which says a countable subset of a (nontrivial) vector space over a complete field has dense complement (used in section 10).
+Apart from the Weierstrass file, the other two imports are quite specific. `Mathlib.Data.Nat.Choose.Cast` gives `Nat.cast_choose_two`, which says $$\binom{n}{2} = n(n-1)/2$$ once cast into a field (used in section 6). `Mathlib.Topology.Algebra.Module.Cardinality` gives `Set.Countable.dense_compl`, which says a countable subset of a (nontrivial) vector space over a complete field has dense complement (used in section 10).
 
 `open Filter Topology` brings in the filter notation that the whole proof is written in. `𝓝 a` is the filter of neighbourhoods of `a`, and `𝓝[≠] a` is the punctured version. `∀ᶠ z in F, P z` reads "`P` holds eventually along `F`", i.e. on some set belonging to `F`, so `∀ᶠ z in 𝓝 0, P z` just means "`P` holds on a neighbourhood of `0`". Similarly `f =ᶠ[F] g` means `f` and `g` agree eventually along `F`, i.e. they have the same germ. `open scoped Nat` gives the factorial notation `n !`.
 
@@ -102,7 +102,7 @@ lemma iteratedDeriv_weierstrassPExcept_zero (n : ℕ) :
   simp
 ```
 
-**The maths.** Mathlib's `℘[L - l₀]` is the $$\wp$$-sum with the $$l_0$$ term removed. Taking $$l_0 = 0$$ removes exactly the pole at the origin, so
+Mathlib's `℘[L - l₀]` is the $$\wp$$-sum with the $$l_0$$ term removed. Taking $$l_0 = 0$$ removes exactly the pole at the origin, so
 
 $$
 f(z) := \wp_{L}(z) - \frac{1}{z^2} = \sum_{l \in L \setminus\{0\}} \left( \frac{1}{(z-l)^2} - \frac{1}{l^2} \right)
@@ -118,7 +118,7 @@ For odd $$k$$ we have $$G_k = 0$$, since the terms for $$l$$ and $$-l$$ cancel, 
 
 The same story happens for $$\wp'$$. Mathlib's `℘'[L - l₀]` is the series $$\sum_{l \neq l_0} -2/(z-l)^3$$, defined as its own series rather than as a derivative, and removing the $$l = 0$$ term gives $$\wp'_L(z) = -2/z^3 + (\text{analytic})$$.
 
-**The Lean.** `eventually_notMem_lattice` says that close to $$0$$, but not at $$0$$, there are no lattice points. This is just discreteness: Mathlib's `compl_lattice_diff_singleton_mem_nhds 0` says $$(L \setminus \{0\})^c$$ is a neighbourhood of $$0$$. The tactic `filter_upwards [h₁, …, hₖ] with z a₁ … aₖ` turns a goal `∀ᶠ z in F, P z` into the goal `P z`, where `a₁, …, aₖ` are the properties from `h₁, …, hₖ` at the point `z`. Here:
+eventually_notMem_lattice` says that close to $$0$$, but not at $$0$$, there are no lattice points. This is just discreteness: Mathlib's `compl_lattice_diff_singleton_mem_nhds 0` says $$(L \setminus \{0\})^c$$ is a neighbourhood of $$0$$. The tactic `filter_upwards [h₁, …, hₖ] with z a₁ … aₖ` turns a goal `∀ᶠ z in F, P z` into the goal `P z`, where `a₁, …, aₖ` are the properties from `h₁, …, hₖ` at the point `z`. Here:
 
 - `mem_nhdsWithin_of_mem_nhds` weakens "neighbourhood of 0" to "punctured neighbourhood of 0", and gives `hz : z ∉ L \ {0}`.
 - `self_mem_nhdsWithin` gives `z ∈ {0}ᶜ`. Since `𝓝[≠] 0` is literally `𝓝[{0}ᶜ] 0`, this unfolds to `z ≠ 0`, which is why the type ascription `(hz0 : z ≠ 0)` is accepted.
@@ -154,13 +154,13 @@ lemma eventually_derivWeierstrassP_ne_zero :
   linarith
 ```
 
-**The maths.** Later (section 4) we need to divide by $$\wp'$$, so we need it to be nonzero near $$0$$. Write $$\wp'_L(z) = -2/z^3 + g(z)$$, where $$g$$ is `℘'[L - 0]`. This $$g$$ is analytic at $$0$$ and $$g(0) = 0$$, since $$g$$ is odd. If $$\wp'_L(z) = 0$$ then $$g(z) = 2/z^3$$. But for $$z$$ close to $$0$$ we have $$\lvert g(z) \rvert < 1$$, while for $$\lvert z \rvert < 1$$ we have $$\lvert 2/z^3 \rvert > 2$$. So the pole term wins, and $$\wp'$$ can't vanish.
+Later (section 4) we need to divide by $$\wp'$$, so we need it to be nonzero near $$0$$. Write $$\wp'_L(z) = -2/z^3 + g(z)$$, where $$g$$ is `℘'[L - 0]`. This $$g$$ is analytic at $$0$$ and $$g(0) = 0$$, since $$g$$ is odd. If $$\wp'_L(z) = 0$$ then $$g(z) = 2/z^3$$. But for $$z$$ close to $$0$$ we have $$\lvert g(z) \rvert < 1$$, while for $$\lvert z \rvert < 1$$ we have $$\lvert 2/z^3 \rvert > 2$$. So the pole term wins, and $$\wp'$$ can't vanish.
 
-**The Lean.** `h1` says $$\lvert g(z) \rvert < 1$$ near $$0$$. It uses continuity of $$g$$ at $$0$$ (`ContinuousAt.eventually_mem`: if $$g(0)$$ lies in an open set then so does $$g(z)$$ for $$z$$ near $$0$$), together with $$g(0) = 0$$ from `derivWeierstrassPExcept_zero_zero`. `h2` says $$\lvert z \rvert < 1$$ near $$0$$. Both are statements on the full neighbourhood `𝓝 0`, so `filter_mono nhdsWithin_le_nhds` moves them to the punctured neighbourhood. This uses the fact that `𝓝[≠] 0 ≤ 𝓝 0`: anything true near $$0$$ is true near $$0$$ away from $$0$$.
+`h1` says $$\lvert g(z) \rvert < 1$$ near $$0$$. It uses continuity of $$g$$ at $$0$$ (`ContinuousAt.eventually_mem`: if $$g(0)$$ lies in an open set then so does $$g(z)$$ for $$z$$ near $$0$$), together with $$g(0) = 0$$ from `derivWeierstrassPExcept_zero_zero`. `h2` says $$\lvert z \rvert < 1$$ near $$0$$. Both are statements on the full neighbourhood `𝓝 0`, so `filter_mono nhdsWithin_le_nhds` moves them to the punctured neighbourhood. This uses the fact that `𝓝[≠] 0 ≤ 𝓝 0`: anything true near $$0$$ is true near $$0$$ away from $$0$$.
 
 As before, the goal `℘'[L] z ≠ 0` means `℘'[L] z = 0 → False`, so the last name `hzero` introduces `℘'[L] z = 0`, and we're aiming for a contradiction. The rewrites turn `hz1 : ‖℘'[L - 0] z‖ < 1` into `‖2‖ / ‖z‖ ^ 3 < 1`, then `div_lt_one` turns that into `2 < ‖z‖ ^ 3`. `hz` is proved first so that `positivity` can check `0 < ‖z‖ ^ 3`, which `div_lt_one` needs. `pow_lt_one₀` turns `‖z‖ < 1` into `‖z‖ ^ 3 < 1`, and `linarith` spots that $$2 < \lVert z \rVert^3 < 1$$ is impossible.
-
-**Why it works.** It's the standard "the pole dominates" argument, written out with explicit norm bounds. It's correct, but quite long for what it does; I come back to this at the end.
+ 
+This is a fairly standard argument. It's correct, but quite long for what it does; I come back to this at the end.
 
 ## 4. The second-order differential equation
 
@@ -189,7 +189,7 @@ lemma eventually_deriv_derivWeierstrassP :
   linear_combination hder
 ```
 
-**The maths.** Differentiating $$(\wp')^2 = 4\wp^3 - g_2\wp - g_3$$ gives
+Differentiating $$(\wp')^2 = 4\wp^3 - g_2\wp - g_3$$ gives
 
 \begin{equation}
 2\wp'\wp'' = 12\wp^2\wp' - g_2\wp',
@@ -203,7 +203,7 @@ and wherever $$\wp' \neq 0$$ we can divide by $$2\wp'$$ to get
 
 By sections 2 and 3, near $$0$$ (but not at $$0$$) we're away from the lattice and $$\wp' \neq 0$$, so this holds on a punctured neighbourhood of $$0$$.
 
-**The Lean.** There's one subtle point here. You can't differentiate an identity that only holds at a single point: to conclude that two functions have the same derivative at $$z$$, they have to agree on a whole neighbourhood of $$z$$. That's what `hev` provides. The differential equation (`derivWeierstrassP_sq`) holds off the lattice, the complement of the lattice is open (`isClosed_lattice.isOpen_compl`), and it contains $$z$$, so it's a neighbourhood of $$z$$. Then `Filter.EventuallyEq.deriv_eq` says functions with the same germ at $$z$$ have the same derivative there, which gives `hder`.
+Note that you can't differentiate an identity that only holds at a single point: to conclude that two functions have the same derivative at $$z$$, they have to agree on a whole neighbourhood of $$z$$. This is what `hev` provides. The complement of the lattice is open (`isClosed_lattice.isOpen_compl`), and it contains $$z$$, so it's a neighbourhood of $$z$$. Then `Filter.EventuallyEq.deriv_eq` says functions with the same germ at $$z$$ have the same derivative there, which gives `hder`.
 
 `AnalyticOnNhd ℂ f s` means `∀ x ∈ s, AnalyticAt ℂ f x`, so `analyticOnNhd_derivWeierstrassP z hz` is analyticity at `z`, and `.differentiableAt` weakens that. `hP` says the derivative of $$\wp$$ is $$\wp'$$. It comes from `simpa`, which uses Mathlib's simp lemma `deriv_weierstrassP : deriv ℘[L] = ℘'[L]`; this holds globally, again thanks to junk values.
 
@@ -211,7 +211,7 @@ By sections 2 and 3, near $$0$$ (but not at $$0$$) we're away from the lattice a
 
 To divide by $$2\wp'$$, `apply mul_left_cancel₀ (a := 2 * ℘'[L] z) _` changes the goal $$b = c$$ into $$a b = a c$$; this is valid since $$a \neq 0$$, and `(by simpa using hz')` provides that. `push_cast` tidies up casts and exponents like `2 - 1`. Finally, `linear_combination hder` closes a goal `a = b` given `hder : c = d` by checking that $$(a - b) - (c - d) = 0$$ is a ring identity, which it is here.
 
-**Why it works.** The cancellation is valid exactly because we restricted to points where $$\wp' \neq 0$$. This is the only reason section 3 exists.
+The cancellation is valid because we restricted to points where $$\wp' \neq 0$$. This is the only reason section 3 exists.
 
 ## 5. The key identity for the pole-free part
 
@@ -251,7 +251,7 @@ lemma key_eventuallyEq :
   rwa [nhdsNE_sup_pure] at h12
 ```
 
-**The maths.** Now substitute the Laurent expansion into $$\wp'' = 6\wp^2 - g_2/2$$. From section 2, $$\wp = f + z^{-2}$$ and `℘'[L - 0]` $$= \wp' + 2z^{-3}$$, so differentiating gives
+Now substitute the Laurent expansion into $$\wp'' = 6\wp^2 - g_2/2$$. From section 2, $$\wp = f + z^{-2}$$ and `℘'[L - 0]` $$= \wp' + 2z^{-3}$$, so differentiating gives
 
 $$
 \frac{d}{dz}\,\wp'_{L\setminus 0} = \wp'' - \frac{6}{z^4} = 6\left(f + \frac{1}{z^2}\right)^2 - \frac{g_2}{2} - \frac{6}{z^4} = 6f^2 + \frac{12 f}{z^2} - \frac{g_2}{2}.
@@ -265,11 +265,9 @@ z^2 f''(z) = 6 z^2 f(z)^2 + 12 f(z) - \frac{g_2}{2} z^2,
 
 where "$$f''$$" here means `deriv ℘'[L - 0]`. At $$z = 0$$ both sides are $$0$$ (the right because $$f(0) = 0$$), so the identity holds on a full neighbourhood of $$0$$. That last point matters. In section 7 we take $$n$$-th derivatives at $$0$$, and derivatives at $$0$$ "see" the value at $$0$$, so an identity on the punctured neighbourhood alone wouldn't be enough.
 
-**The Lean.** `h1` proves the identity on the punctured neighbourhood. `hEq` rewrites `℘'[L - 0]` as the function $$w \mapsto \wp'(w) + 2/w^3$$ (using `funext` to go from a pointwise identity to an equality of functions). `hz3` differentiates $$2/w^3$$ using the quotient rule `HasDerivAt.div`. The rule outputs the derivative in the form $$(0 \cdot z^3 - 2 \cdot 3z^2)/(z^3)^2$$, so `convert h using 1` reduces the problem to showing that this equals $$-6/z^4$$, and `field_simp; ring` does the algebra (with `hz0` available to justify clearing denominators). `hsum` adds the two derivatives. Then we rewrite with `hEq`, the computed derivative, the differential equation `hD` from section 4, and the Laurent expansion `weierstrassP_eq`, and `field_simp; ring` checks the resulting rational identity.
+`h1` proves the identity on the punctured neighbourhood. `hEq` rewrites `℘'[L - 0]` as the function $$w \mapsto \wp'(w) + 2/w^3$$ (using `funext` to go from a pointwise identity to an equality of functions). `hz3` differentiates $$2/w^3$$ using the quotient rule `HasDerivAt.div`. The rule outputs the derivative in the form $$(0 \cdot z^3 - 2 \cdot 3z^2)/(z^3)^2$$, so `convert h using 1` reduces the problem to showing that this equals $$-6/z^4$$, and `field_simp; ring` does the algebra (with `hz0` available to justify clearing denominators). `hsum` adds the two derivatives. Then we rewrite with `hEq`, the computed derivative, the differential equation `hD` from section 4, and the Laurent expansion `weierstrassP_eq`, and `field_simp; ring` checks the resulting rational identity.
 
 `h2` proves the identity at the single point $$0$$. `pure 0` is the filter "at the point 0", and `eventually_pure` says that eventually along `pure 0` just means "at 0"; `simp` then evaluates both sides to $$0$$. The last two lines glue these together. `Filter.eventually_sup` says a property holds eventually along $$F \sqcup G$$ iff it does along both, and `nhdsNE_sup_pure` says the punctured neighbourhood filter joined with the point filter is the full neighbourhood filter.
-
-**Why it works.** The derivation handles the singularity honestly. The algebra is done away from $$0$$, where everything is defined, and the value at $$0$$ is checked separately.
 
 ## 6. The Leibniz rule for z² g(z)
 
@@ -288,7 +286,7 @@ lemma iteratedDeriv_sq_mul (g : ℂ → ℂ) (hg : AnalyticAt ℂ g 0) {n : ℕ}
   norm_num [Nat.factorial_two]
 ```
 
-**The maths.** By the Leibniz rule,
+By the Leibniz rule,
 
 $$
 \frac{d^n}{dz^n}\Big(z^2 g(z)\Big)\Big|_{z=0} = \sum_{i=0}^{n} \binom{n}{i} \left.\frac{d^i}{dz^i} z^2\right|_{z=0} g^{(n-i)}(0).
@@ -296,9 +294,9 @@ $$
 
 The derivatives of $$z^2$$ at $$0$$ all vanish except the second, which is $$2$$. So only the $$i = 2$$ term survives, and $$2\binom{n}{2} = n(n-1)$$, giving $$n(n-1)\,g^{(n-2)}(0)$$.
 
-**The Lean.** `iteratedDeriv_fun_mul` is Mathlib's Leibniz rule. It needs both factors to be smooth at the point: `fun_prop` handles $$z^2$$, and `hg.contDiffAt` converts the analyticity of $$g$$ into smoothness. `Finset.sum_eq_single_of_mem 2 h₁ h₂` collapses a sum to its $$i = 2$$ term, given `h₁ : 2 ∈ range (n + 1)` (true since $$n \geq 2$$, checked by `omega`) and `h₂`, saying every other term is zero. Both of these use Mathlib's `iteratedDeriv_fun_pow_zero`, which says the $$i$$-th derivative of $$z^m$$ at $$0$$ is `if i = m then m ! else 0`. Finally `Nat.cast_choose_two` rewrites $$\binom{n}{2}$$ as $$n(n-1)/2$$, and `norm_num` with $$2! = 2$$ cancels the halves.
+`iteratedDeriv_fun_mul` is Mathlib's Leibniz rule. It needs both factors to be smooth at the point: `fun_prop` handles $$z^2$$, and `hg.contDiffAt` converts the analyticity of $$g$$ into smoothness. `Finset.sum_eq_single_of_mem 2 h₁ h₂` collapses a sum to its $$i = 2$$ term, given `h₁ : 2 ∈ range (n + 1)` (true since $$n \geq 2$$, checked by `omega`) and `h₂`, saying every other term is zero. Both of these use Mathlib's `iteratedDeriv_fun_pow_zero`, which says the $$i$$-th derivative of $$z^m$$ at $$0$$ is `if i = m then m ! else 0`. Finally `Nat.cast_choose_two` rewrites $$\binom{n}{2}$$ as $$n(n-1)/2$$, and `norm_num` with $$2! = 2$$ cancels the halves.
 
-**Why it works.** It's the Leibniz rule plus bookkeeping. The hypothesis $$n \geq 2$$ isn't really needed mathematically (for $$n = 0, 1$$ both sides are $$0$$), but it makes the sum collapse easy to state.
+The hypothesis $$n \geq 2$$ isn't really needed mathematically (for $$n = 0, 1$$ both sides are $$0$$), but I think it makes the sum collapse easy to state.
 
 ## 7. The recursion for the Taylor coefficients
 
@@ -357,7 +355,7 @@ lemma recursion {n : ℕ} (hn : 3 ≤ n) :
   linear_combination key
 ```
 
-**The maths.** Take the $$n$$-th derivative at $$0$$ of both sides of the key identity. Using section 6 on each $$z^2(\cdots)$$ term, and the ordinary Leibniz rule for $$f^2$$, we get
+Take the $$n$$-th derivative at $$0$$ of both sides of the key identity. Using section 6 on each $$z^2(\cdots)$$ term, and the ordinary Leibniz rule for $$f^2$$, we get
 
 $$
 n(n-1)\, f^{(n)}(0) = 6\,n(n-1) \sum_{k=0}^{n-2} \binom{n-2}{k} f^{(k)}(0)\, f^{(n-2-k)}(0) + 12\, f^{(n)}(0) - \frac{g_2}{2}\cdot\left.\frac{d^n}{dz^n} z^2\right|_{z = 0}.
@@ -373,7 +371,7 @@ Something I only noticed while writing this up: the coefficient on the left fact
 
 As a sanity check, take $$n = 6$$. Using $$f(0) = f'(0) = f'''(0) = 0$$, only the $$k = 2$$ term survives and we get $$18\,f^{(6)}(0) = 180 \cdot 6 \cdot (3!\,G_4)^2$$, so $$f^{(6)}(0) = 2160\,G_4^2$$. Since $$f^{(6)}(0) = 7!\,G_8$$, this says $$G_8 = \tfrac{3}{7} G_4^2$$, which is the classical relation. Nice.
 
-**The Lean.** The strategy is to compute the $$n$$-th derivative at $$0$$ of each side of `key_eventuallyEq`, and then compare them using `L.key_eventuallyEq.iteratedDeriv_eq n`. That is Mathlib's `Filter.EventuallyEq.iteratedDeriv_eq`: functions with the same germ at a point have the same iterated derivatives there. This is where it pays off that section 5 proved the identity on the full neighbourhood `𝓝 0`.
+The strategy is to compute the $$n$$-th derivative at $$0$$ of each side of `key_eventuallyEq`, and then compare them using `L.key_eventuallyEq.iteratedDeriv_eq n`. That is Mathlib's `Filter.EventuallyEq.iteratedDeriv_eq`: functions with the same germ at a point have the same iterated derivatives there. This is where it pays off that section 5 proved the identity on the full neighbourhood `𝓝 0`.
 
 `hL` handles the left-hand side. Section 6 applied to $$g =$$ `deriv ℘'[L - 0]` gives $$n(n-1)$$ times the $$(n-2)$$-th derivative of `deriv ℘'[L - 0]`. `g` is analytic since the derivative of an analytic function is analytic (`AnalyticAt.deriv`). `congr 1` strips the common factor $$n(n-1)$$. Then `iteratedDeriv_succ'` (which says `iteratedDeriv (m + 1) f = iteratedDeriv m (deriv f)`), read backwards, turns the $$(n-2)$$-th derivative of `deriv ℘'[L - 0]` into the $$(n-1)$$-th derivative of `℘'[L - 0]`. At this point both sides have closed forms. Mathlib's `iteratedDeriv_derivWeierstrassPExcept_self` gives $$(n+1)!\,G_{n+2}$$ for the left, and our formula from section 2 gives the same for the right.
 
@@ -381,7 +379,7 @@ Interestingly, the proof never shows that `deriv ℘[L - 0] = ℘'[L - 0]` near 
 
 `e1` to `e6` take the right-hand side apart. `iteratedDeriv_fun_sub` and `iteratedDeriv_fun_add` split sums and differences, with `fun_prop` discharging the smoothness side conditions (this is where the local `fun_prop` attribute from section 1 is needed, to get from analyticity of $$f$$ to smoothness). `iteratedDeriv_const_mul_field` pulls out constants. `e3` kills the $$g_2 z^2$$ term, since $$n \neq 2$$. `e5` uses section 6 on $$z^2 f^2$$, and `e6` is the Leibniz rule for $$f \cdot f$$. After rewriting all of these into `key`, `linear_combination key` rearranges it into the stated recursion.
 
-**Why it works.** After the derivatives are computed, what's left is linear algebra over $$\mathbb{C}$$, which `linear_combination` handles.
+After the derivatives are computed, what's left is linear algebra over $$\mathbb{C}$$, which `linear_combination` handles.
 
 ## 8. All coefficients are determined by g₂ and g₃
 
@@ -430,16 +428,16 @@ lemma iteratedDeriv_eq_of_invariants {L₁ L₂ : PeriodPair}
       rw [h₁, h₂, hsum]
 ```
 
-**The maths.** We show by strong induction on $$n$$ that $$f_{L_1}^{(n)}(0) = f_{L_2}^{(n)}(0)$$. First, $$g_2 = 60\,G_4$$ and $$g_3 = 140\,G_6$$, so equal invariants means equal $$G_4$$ and $$G_6$$.
+We show by strong induction on $$n$$ that $$f_{L_1}^{(n)}(0) = f_{L_2}^{(n)}(0)$$. First, $$g_2 = 60\,G_4$$ and $$g_3 = 140\,G_6$$, so equal invariants means equal $$G_4$$ and $$G_6$$.
 
 - For $$n \leq 4$$, use the closed form $$f^{(n)}(0) = (n+1)!\,G_{n+2}$$. At $$n = 0$$ both sides are $$0$$. At $$n = 1, 3$$ they involve $$G_3, G_5$$, which are $$0$$. At $$n = 2, 4$$ they involve $$G_4, G_6$$, which agree.
 - For $$n \geq 5$$, the recursion only involves $$f^{(k)}(0)$$ for $$k \leq n - 2$$, which agree by induction. Since $$(n-4)(n+3) \neq 0$$, we can divide and get $$f_{L_1}^{(n)}(0) = f_{L_2}^{(n)}(0)$$.
 
-**The Lean.** `induction n using Nat.strong_induction_on` gives the strong induction hypothesis `ih : ∀ m < n, …`. `hG4` unfolds the definition of `g₂` with `simp only [g₂]`, turning `hg₂` into `60 * L₁.G 4 = 60 * L₂.G 4`, and cancels the $$60$$ with `mul_left_cancel₀`; `hG6` is the same with $$140$$. `rcases lt_or_ge n 5` splits into the two cases. For $$n < 5$$, `interval_cases n` produces the five goals $$n = 0, \ldots, 4$$, and each is a `simp` call with the closed form and the relevant fact about $$G$$ (`G_eq_zero_of_odd` for $$n = 1, 3$$). For $$n \geq 5$$, `hsum` shows the two sums in the recursions agree term by term (`Finset.sum_congr`), using `ih` twice. `omega` checks that $$k$$ and $$n - 2 - k$$ are below $$n$$.
+`induction n using Nat.strong_induction_on` gives the strong induction hypothesis `ih : ∀ m < n, …`. `hG4` unfolds the definition of `g₂` with `simp only [g₂]`, turning `hg₂` into `60 * L₁.G 4 = 60 * L₂.G 4`, and cancels the $$60$$ with `mul_left_cancel₀`; `hG6` is the same with $$140$$. `rcases lt_or_ge n 5` splits into the two cases. For $$n < 5$$, `interval_cases n` produces the five goals $$n = 0, \ldots, 4$$, and each is a `simp` call with the closed form and the relevant fact about $$G$$ (`G_eq_zero_of_odd` for $$n = 1, 3$$). For $$n \geq 5$$, `hsum` shows the two sums in the recursions agree term by term (`Finset.sum_congr`), using `ih` twice. `omega` checks that $$k$$ and $$n - 2 - k$$ are below $$n$$.
 
 `hcoef` is the fiddliest part, because the coefficient lives in $$\mathbb{C}$$ but the argument is about natural numbers. `omega` can't do nonlinear arithmetic, but given `h20 : 20 ≤ n(n-1)` as a fact about the product it can rule out $$n(n-1) = 12$$. `push_cast` with `Nat.cast_sub` moves the casts around (the subtraction cast needs $$1 \leq n$$), and `exact_mod_cast` finishes by transporting `hne` from $$\mathbb{N}$$ to $$\mathbb{C}$$. Finally, `mul_left_cancel₀ hcoef` cancels the coefficient and the two recursions `h₁`, `h₂` plus `hsum` close the goal.
 
-**Why it works.** Every coefficient is given by a formula in strictly earlier coefficients with a nonzero denominator, so strong induction goes through. (Computing `hG4` and `hG6` inside the induction is a bit wasteful, as they don't depend on $$n$$, but it doesn't hurt anything.)
+Every coefficient is given by a formula in strictly earlier coefficients with a nonzero denominator, so strong induction goes through. (Computing `hG4` and `hG6` inside the induction is a bit wasteful, as they don't depend on $$n$$, but it doesn't hurt anything.)
 
 ## 9. Same coefficients, same ℘ near 0
 
@@ -467,11 +465,11 @@ lemma weierstrassP_eventuallyEq {L₁ L₂ : PeriodPair}
   rw [L₁.weierstrassP_eq z, L₂.weierstrassP_eq z, hz]
 ```
 
-**The maths.** An analytic function equals its Taylor series near the point, so two analytic functions with the same Taylor coefficients agree near that point. So $$f_{L_1} = f_{L_2}$$ near $$0$$, and adding the common pole $$1/z^2$$ back gives $$\wp_{L_1} = \wp_{L_2}$$ near $$0$$.
+An analytic function equals its Taylor series near the point, so two analytic functions with the same Taylor coefficients agree near that point. So $$f_{L_1} = f_{L_2}$$ near $$0$$, and adding the common pole $$1/z^2$$ back gives $$\wp_{L_1} = \wp_{L_2}$$ near $$0$$.
 
-**The Lean.** Mathlib's `AnalyticAt.hasFPowerSeriesAt` says an analytic function $$f$$ has power series $$\sum_n \frac{f^{(n)}(x)}{n!}(z - x)^n$$ at $$x$$, packaged as `FormalMultilinearSeries.ofScalars ℂ (fun n ↦ iteratedDeriv n f x / n !)`. `hp` shows the two series are equal using `h`, and after `rw [hp] at h₁` both functions have literally the same series. Then `h₁.sub h₂` says the difference has series "$$p - p$$", which `simpa` simplifies to the zero series. Mathlib's `HasFPowerSeriesAt.eventually_eq_zero` says a function with zero power series is zero near the point. The last two lines add $$1/z^2$$ back using `weierstrassP_eq`.
+Mathlib's `AnalyticAt.hasFPowerSeriesAt` says an analytic function $$f$$ has power series $$\sum_n \frac{f^{(n)}(x)}{n!}(z - x)^n$$ at $$x$$, packaged as `FormalMultilinearSeries.ofScalars ℂ (fun n ↦ iteratedDeriv n f x / n !)`. `hp` shows the two series are equal using `h`, and after `rw [hp] at h₁` both functions have literally the same series. Then `h₁.sub h₂` says the difference has series "$$p - p$$", which `simpa` simplifies to the zero series. Mathlib's `HasFPowerSeriesAt.eventually_eq_zero` says a function with zero power series is zero near the point. The last two lines add $$1/z^2$$ back using `weierstrassP_eq`.
 
-**Why it works.** This is uniqueness of power series expansions, which Mathlib already has in exactly the form we need.
+This is uniqueness of power series expansions, which Mathlib already has in the form we need.
 
 ## 10. Extending to the complement of both lattices
 
@@ -496,13 +494,13 @@ lemma eqOn_weierstrassP {L₁ L₂ : PeriodPair} (hev : ℘[L₁] =ᶠ[𝓝 (0 :
       (Set.compl_subset_compl.mpr Set.subset_union_right)) hpre hz₀c hev'
 ```
 
-**The maths.** Let $$\Omega = \mathbb{C} \setminus (L_1 \cup L_2)$$. Both $$\wp$$ functions are analytic on $$\Omega$$. $$\Omega$$ is connected, since removing a countable set from $$\mathbb{C} \cong \mathbb{R}^2$$ can't disconnect it (you can always route a path around countably many points). The identity theorem says that two analytic functions on a connected open set which agree near one point of it agree everywhere on it. The one catch is that $$0$$ lies in both lattices, so $$0 \notin \Omega$$. Instead we pick a point $$z_0 \in \Omega$$ inside the neighbourhood of $$0$$ where the functions already agree. Such a point exists because $$\Omega$$ is dense.
+Let $$\Omega = \mathbb{C} \setminus (L_1 \cup L_2)$$. Both $$\wp$$ functions are analytic on $$\Omega$$. $$\Omega$$ is connected, since removing a countable set from $$\mathbb{C} \cong \mathbb{R}^2$$ can't disconnect it (you can always route a path around countably many points). The identity theorem says that two analytic functions on a connected open set which agree near one point of it agree everywhere on it. The one catch is that $$0$$ lies in both lattices, so $$0 \notin \Omega$$. Instead we pick a point $$z_0 \in \Omega$$ inside the neighbourhood of $$0$$ where the functions already agree. Such a point exists because $$\Omega$$ is dense.
 
-**The Lean.** Each lattice is countable by `countable_of_Lindelof_of_discrete`: Mathlib knows the lattice is discrete and proper (hence Lindelöf), and a discrete Lindelöf space is countable. `Set.Countable.isConnected_compl_of_one_lt_rank` gives connectedness of the complement of a countable set in a real vector space of dimension more than $$1$$, where the dimension condition $$1 < \dim_{\mathbb{R}} \mathbb{C} = 2$$ is `by simp`.
+Each lattice is countable by `countable_of_Lindelof_of_discrete`: Mathlib knows the lattice is discrete and proper (hence Lindelöf), and a discrete Lindelöf space is countable. `Set.Countable.isConnected_compl_of_one_lt_rank` gives connectedness of the complement of a countable set in a real vector space of dimension more than $$1$$, where the dimension condition $$1 < \dim_{\mathbb{R}} \mathbb{C} = 2$$ is `by simp`.
 
 `mem_nhds_iff` unpacks `hev` into an open set `U ∋ 0` on which the functions agree. `Set.Countable.dense_compl ℂ` says $$\Omega$$ is dense, and `Dense.exists_mem_open` finds `z₀ ∈ Ω ∩ U`. `hev'` repackages agreement on `U` as agreement near `z₀`. The last step is Mathlib's identity theorem, `AnalyticOnNhd.eqOn_of_preconnected_of_eventuallyEq`. We need analyticity of both functions on $$\Omega$$, and Mathlib gives analyticity of $$\wp_{L_i}$$ on $$\mathbb{C} \setminus L_i$$; `.mono` restricts that to the smaller set $$\Omega$$.
 
-**Why it works.** This is the identity theorem, and the only real work is the topology of $$\Omega$$ (connected and dense), which Mathlib handles.
+This is the identity theorem, and the only real work is the topology of $$\Omega$$ (connected and dense), which Mathlib handles.
 
 ## 11. The poles recover the lattice
 
@@ -530,13 +528,13 @@ lemma lattice_le_of_eqOn {L₁ L₂ : PeriodPair}
   exact absurd h₂ (by decide)
 ```
 
-**The maths.** Suppose $$x \in L_1$$ but $$x \notin L_2$$. Near $$x$$, but not at $$x$$, there are no points of $$L_1$$ (discreteness) and no points of $$L_2$$ ($$L_2$$ is closed and $$x \notin L_2$$), so the two $$\wp$$ functions agree on a punctured neighbourhood of $$x$$. But $$\wp_{L_1}$$ has a double pole at $$x$$, while $$\wp_{L_2}$$ is analytic at $$x$$. Functions that agree on a punctured neighbourhood have the same order there, so $$-2 \geq 0$$, a contradiction.
+Suppose $$x \in L_1$$ but $$x \notin L_2$$. Near $$x$$, but not at $$x$$, there are no points of $$L_1$$ (discreteness) and no points of $$L_2$$ ($$L_2$$ is closed and $$x \notin L_2$$), so the two $$\wp$$ functions agree on a punctured neighbourhood of $$x$$. But $$\wp_{L_1}$$ has a double pole at $$x$$, while $$\wp_{L_2}$$ is analytic at $$x$$. Functions that agree on a punctured neighbourhood have the same order there, so $$-2 \geq 0$$, a contradiction.
 
-**The Lean.** `L₁.lattice ≤ L₂.lattice` means `∀ x ∈ L₁, x ∈ L₂`, so `intro x hx` works directly, and `by_contra hx₂` assumes `x ∉ L₂`. `hW` is the neighbourhood from the maths: the complement of $$L_2$$ intersected with the complement of $$L_1 \setminus \{x\}$$. It's the intersection of two neighbourhoods of $$x$$ (`Filter.inter_mem`). After `filter_upwards`, `refine h ?_` reduces agreement at `z` to showing `z` is outside the union, and `rintro (hzL | hzL)` does case analysis on "`z` is in the union".
+`L₁.lattice ≤ L₂.lattice` means `∀ x ∈ L₁, x ∈ L₂`, so `intro x hx` works directly, and `by_contra hx₂` assumes `x ∉ L₂`. `hW` is the neighbourhood from the maths: the complement of $$L_2$$ intersected with the complement of $$L_1 \setminus \{x\}$$. It's the intersection of two neighbourhoods of $$x$$ (`Filter.inter_mem`). After `filter_upwards`, `refine h ?_` reduces agreement at `z` to showing `z` is outside the union, and `rintro (hzL | hzL)` does case analysis on "`z` is in the union".
 
 Mathlib measures poles and zeros with `meromorphicOrderAt f x : WithTop ℤ`, where the `⊤` is for functions that vanish near $$x$$. Mathlib's `order_weierstrassP` gives order $$-2$$ at lattice points. `AnalyticAt.meromorphicOrderAt_nonneg` gives order $$\geq 0$$ at points where the function is analytic. `meromorphicOrderAt_congr` says the order only depends on the function on a punctured neighbourhood, so rewriting `h₂` with it and `h₁` turns it into `0 ≤ -2`. `decide` evaluates that in `WithTop ℤ` and finds it false.
 
-**Why it works.** The order is an invariant of the germ on a punctured neighbourhood, and it tells lattice points apart from non-lattice points.
+The order is an invariant of the germ on a punctured neighbourhood, and it tells lattice points apart from non-lattice points.
 
 ## 12. The main theorem
 
@@ -559,9 +557,9 @@ theorem invariantsDetermineLattice :
   fun _ _ => lattice_eq_of_g₂_eq_of_g₃_eq
 ```
 
-**The maths.** Chain everything together. Equal invariants give equal Taylor coefficients (section 8), which give equal $$\wp$$ near $$0$$ (section 9), which gives equal $$\wp$$ off both lattices (section 10). Then section 11 gives $$L_1 \subseteq L_2$$, and by symmetry $$L_2 \subseteq L_1$$.
+Chain everything together. Equal invariants give equal Taylor coefficients (section 8), which give equal $$\wp$$ near $$0$$ (section 9), which gives equal $$\wp$$ off both lattices (section 10). Then section 11 gives $$L_1 \subseteq L_2$$, and by symmetry $$L_2 \subseteq L_1$$.
 
-**The Lean.** The first line is the whole chain as nested function applications. `le_antisymm` proves equality from the two inclusions. For the reverse inclusion, `lattice_le_of_eqOn` wants agreement of `℘[L₂]` and `℘[L₁]` on the complement of $$L_2 \cup L_1$$. `rw [Set.union_comm]` swaps the union round, and `(hEqOn hz).symm` swaps the equality round. `invariantsDetermineLattice` is the same theorem with the lattices as explicit arguments. In `fun _ _ =>` the underscores are just unused names for those two arguments, and Lean fills in the implicit `L₁`, `L₂` of `lattice_eq_of_g₂_eq_of_g₃_eq` by unification.
+The first line is the whole chain as nested function applications. `le_antisymm` proves equality from the two inclusions. For the reverse inclusion, `lattice_le_of_eqOn` wants agreement of `℘[L₂]` and `℘[L₁]` on the complement of $$L_2 \cup L_1$$. `rw [Set.union_comm]` swaps the union round, and `(hEqOn hz).symm` swaps the equality round. `invariantsDetermineLattice` is the same theorem with the lattices as explicit arguments. In `fun _ _ =>` the underscores are just unused names for those two arguments, and Lean fills in the implicit `L₁`, `L₂` of `lattice_eq_of_g₂_eq_of_g₃_eq` by unification.
 
 ## Summary
 
@@ -576,6 +574,6 @@ Each lemma lines up with a step of the classical proof.
 
 ## Looking back
 
-Going back over the code for this write-up, there are a few things I'd tidy up. The biggest is section 3. Rather than bounding norms by hand, it's enough to notice that $$z \mapsto z^3\,\wp'_{L \setminus 0}(z) - 2$$ is analytic and equals $$-2$$ at $$0$$, so by continuity it's nonzero near $$0$$, and that already forces $$\wp' \neq 0$$. This is the same pole-clearing trick Mathlib uses to prove the differential equation in the first place, and it cuts the proof down to a few lines. In section 5, Mathlib has a lemma, `eventuallyEq_nhds_of_eventuallyEq_nhdsNE`, which does the "punctured neighbourhood plus the point itself" step in one go. That would also save stating the whole identity twice. The lemma `compl_lattice_diff_singleton_mem_nhds` has also since been renamed to `compl_lattice_sdiff_singleton_mem_nhds` in Mathlib, and the docstring on `invariantsDetermineLattice` just trails off mid-sentence, which does annoy me a little.
+Going back over the code for this write-up, there are a few things I'd tidy up, but I keep procrastinating it. The biggest is section 3. Rather than bounding norms by hand, it's enough to notice that $$z \mapsto z^3\,\wp'_{L \setminus 0}(z) - 2$$ is analytic and equals $$-2$$ at $$0$$, so by continuity it's nonzero near $$0$$, and that already forces $$\wp' \neq 0$$. This is the same pole-clearing trick Mathlib uses to prove the differential equation in the first place, and it cuts the proof down to a few lines. In section 5, Mathlib has a lemma, `eventuallyEq_nhds_of_eventuallyEq_nhdsNE`, which does the "punctured neighbourhood plus the point itself" step in one go. That would also save stating the whole identity twice. The lemma `compl_lattice_diff_singleton_mem_nhds` has also since been renamed to `compl_lattice_sdiff_singleton_mem_nhds` in Mathlib, and the docstring on `invariantsDetermineLattice` just trails off mid-sentence, which does annoy me a little.
 
 Going forward, the natural next step would be the converse. For any $$g_2, g_3 \in \mathbb{C}$$ with $$g_2^3 - 27g_3^2 \neq 0$$ there should exist a lattice with those invariants. This is the harder direction (it's where the uniformisation theorem for elliptic curves comes in), and combined with what's here it would give a bijection between lattices and pairs $$(g_2, g_3)$$ with nonzero discriminant. I'm not sure how much of the machinery for that exists in Mathlib yet, but it would be a nice thing to try.
